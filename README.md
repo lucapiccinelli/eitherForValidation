@@ -38,7 +38,7 @@ val user: Result<NewUser> = Password.from(passwordValue)
             name = NameOfAPerson(firstname, lastname),
             password = password,
             jobDescription = jobDescription,
-            contacts = UserContacts(email, phoneNumber)        
+            contacts = UserContacts(email, phoneNumber))        
     }
 ```
 
