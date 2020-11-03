@@ -14,7 +14,7 @@ In order to better express the domain I wrapped some of this data with domain sp
  
  Then to simplify the building of a `NewUser`, it has a factory method, as well, that takes raw data and returns a `Result<User>`
  
- ```(kotlin)
+ ```kotlin
 val userResult: Result<NewUser> = NewUser.with(
         username = "luca.piccinelli",
         firstname = "Luca",
@@ -28,7 +28,7 @@ val userResult: Result<NewUser> = NewUser.with(
 
 My problem is in the implementation of this `NewUser.with` method. I dont' exactly know how to chain the validation of `Password`, `Email` and `PhoneNumber`. What i would like to achive should be something like:
 
-```(kotlin)
+```kotlin
 val user: Result<NewUser> = Password.from(passwordValue)
     .flatMap{ Email.from(emailValue) }
     .flatMap{ PhoneNumber.from(emailValue) }
