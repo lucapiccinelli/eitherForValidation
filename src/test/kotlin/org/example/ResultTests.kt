@@ -76,4 +76,22 @@ class ResultTests {
 
         assertThat(resultValue).isEqualTo(-1)
     }
+
+    @Test
+    internal fun `GIVEN 2 Oks WHEN i combine and apply a function them THEN i get ok value`() {
+        val resultValue = map2(Result.Ok(1), Result.Ok("2")){ x, s ->
+            x + s.toInt()
+        }.ifError(0)
+
+        assertThat(resultValue).isEqualTo(3)
+    }
+
+    @Test
+    internal fun `GIVEN 2 Errors WHEN i combine and apply a function them THEN i get the error value`() {
+        val resultValue = map2(Result.Ok(1), Result.Error<String>("some error")){ x, s ->
+            x + s.toInt()
+        }.ifError(0)
+
+        assertThat(resultValue).isEqualTo(0)
+    }
 }
