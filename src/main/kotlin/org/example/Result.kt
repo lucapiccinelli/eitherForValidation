@@ -1,22 +1,26 @@
 package org.example
 
 sealed class Result<T>{
-    data class Ok<T>(val value: T): Result<T>() {
-        override fun <R> map(body: (T) -> R): Result<R> = Ok(body(value))
-        override fun <R> flatMap(body: (T) -> Result<R>): Result<R> = body(value)
-        override fun ifError(errorValue: T): T = value
-        override fun ifError(errorHandler: (Error<T>) -> T): T = value
+    data class Ok<T>(val value: T): Result<T>()
+    data class Error<T>(val description: String): Result<T>()
+
+    inline fun <R> map(body: (T) -> R): Result<R> = when(this){
+        is Ok -> Ok(body(this.value))
+        is Error -> Error(this.description)
     }
 
-    data class Error<T>(val description: String): Result<T>() {
-        override fun <R> map(body: (T) -> R): Result<R> = Error(description)
-        override fun <R> flatMap(body: (T) -> Result<R>): Result<R> = Error(description)
-        override fun ifError(errorValue: T): T = errorValue
-        override fun ifError(errorHandler: (Error<T>) -> T): T = errorHandler(this)
+    inline fun <R> flatMap(body: (T) -> Result<R>): Result<R> = when(this){
+        is Ok -> body(this.value)
+        is Error -> Error(this.description)
     }
 
-    abstract fun <R> map(body: (T) -> R): Result<R>
-    abstract fun <R> flatMap(body: (T) -> Result<R>): Result<R>
-    abstract fun ifError(errorValue: T): T
-    abstract fun ifError(errorHandler: (Error<T>) -> T): T
+    fun ifError(errorValue: T): T = when(this){
+        is Ok -> value
+        is Error -> errorValue
+    }
+
+    inline fun ifError(errorHandler: (Error<T>) -> T): T = when(this){
+        is Ok -> value
+        is Error -> errorHandler(this)
+    }
 }
