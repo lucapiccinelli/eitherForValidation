@@ -1,7 +1,9 @@
 package org.example.model
 
 import org.example.Result
+import org.example.exec
 import org.example.map3
+import java.net.URI
 
 data class NewUser(
     val username: String,
@@ -19,18 +21,26 @@ data class NewUser(
             jobDescription: String? = null,
             email: String? = null,
             phoneNumber: String? = null
-        ): Result<NewUser> = map3(
-            Password.from(password),
-            Email.from(email),
-            PhoneNumber.from(phoneNumber)) { validPassword, validEmail, validPhone ->
+        ): Result<NewUser> =
 
-            NewUser(
-                username = username,
-                name = NameOfAPerson(firstname, lastname),
-                password = validPassword,
-                jobDescription = jobDescription,
-                contacts = UserContacts(validEmail, validPhone)
-            )
+            (Password.from(password) and
+             Email.from(email) and
+             PhoneNumber.from(phoneNumber)) exec {
+
+            params { x: Password ->
+                   { y: Email? ->
+                   { z: PhoneNumber? ->
+
+                        NewUser(
+                            username = username,
+                            name = NameOfAPerson(firstname, lastname),
+                            password = x,
+                            jobDescription = jobDescription,
+                            contacts = UserContacts(y, z)
+                        )
+                    }
+                }
+            }
         }
     }
 }
