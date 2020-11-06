@@ -23,11 +23,11 @@ sealed class Result<T>{
 
     fun get(): T = ifError{ error ->  throw ResultException(error) }
 
-    infix fun <R> and(r2: Result<R>): Result<Ap<T, R>> = flatMap { t -> r2.map { r -> Ap(t, r) } }
+    infix fun <R> and(otherResult: Result<R>): Result<Applicative<T, R>> = flatMap { t -> otherResult.map { r -> Applicative(t, r) } }
 }
 
-inline infix fun <A, B, C> Result<out Ap<out A, out B>>.exec(fn: A.(A) -> (B) -> C): Result<C> =
-    map { (a, b) -> a.fn(a)(b) }
+inline infix fun <A, B, C> Result<out Applicative<out A, out B>>.exec(fn: A.(A) -> (B) -> C): Result<C> =
+    map { ap -> ap.params(fn) }
 
 fun <X,Y,R> map2(r1: Result<X>, r2: Result<Y>, body: (X, Y) -> R): Result<R> =
     r1.flatMap { x1 -> r2.map { x2-> body(x1, x2) } }
