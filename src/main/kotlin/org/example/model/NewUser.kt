@@ -23,9 +23,9 @@ data class NewUser(
             phoneNumber: String? = null
         ): Result<NewUser> =
 
-            (Password.from(password) and
-             Email.from(email) and
-             PhoneNumber.from(phoneNumber)) exec {
+            Password.from(password) and
+            Email.from(email) and
+            PhoneNumber.from(phoneNumber) exec {
 
             params { x: Password ->
                    { y: Email? ->
