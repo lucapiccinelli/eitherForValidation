@@ -104,4 +104,13 @@ class ResultTests {
 
         assertThat(y).isEqualTo("2")
     }
+
+    @Test
+    internal fun `GIVEN a fn and two ok results WHEN i apply the fn THEN i get the ok value`() {
+        val fn = { x: Int, y: String -> (x + y.toInt()).toString() }
+        val x = Result.Ok(1)
+        val y = Result.Ok("2")
+
+        Curry(fn)
+    }
 }
