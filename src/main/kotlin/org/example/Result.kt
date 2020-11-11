@@ -42,6 +42,9 @@ inline infix fun <A, B, C> Result<out Applicative<out A, out B>>.exec(fn: A.(A) 
 inline infix fun <A, B, C> Result<Applicative<A, B>>.on(fn: (A) -> (B) -> C): Result<C> =
     map { ap -> ap.with(fn) }
 
+inline infix fun <A, B, C> Result<Applicative<A, B>>.on(crossinline fn: (A, B) -> C): Result<C> =
+    map { ap -> ap.with(Curry.all(fn)) }
+
 fun <X,Y,R> map2(r1: Result<X>, r2: Result<Y>, body: (X, Y) -> R): Result<R> =
     r1.flatMap { x1 -> r2.map { x2-> body(x1, x2) } }
 

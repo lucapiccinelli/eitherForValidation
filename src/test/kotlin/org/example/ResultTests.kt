@@ -111,7 +111,18 @@ class ResultTests {
         val x = Result.Ok(1)
         val y = Result.Ok("2")
 
-        val z = y.ap(x.map { Curry(fn).with(it) }).ifError("")
+        val z = y.ap(x.map { Curry.with(fn, it) }).ifError("")
+
+        assertThat(z).isEqualTo("3")
+    }
+
+    @Test
+    internal fun `GIVEN a fn and two ok results WHEN i exec the fn THEN i get the ok value`() {
+        val fn = { x: Int, y: String -> (x + y.toInt()).toString() }
+        val x = Result.Ok(1)
+        val y = Result.Ok("2")
+
+        val z = (x and y on fn).ifError("")
 
         assertThat(z).isEqualTo("3")
     }

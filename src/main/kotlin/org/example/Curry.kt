@@ -1,8 +1,8 @@
 package org.example
 
-class Curry<A, B, C>(private val fn: (A, B) -> C) {
+object Curry {
 
-    fun with(a: A): (B) -> C = { b: B -> fn(a, b) }
-    fun all(): (A) -> (B) -> C = { a: A -> { b: B -> fn(a, b) } }
+    inline fun <A, B, C> with(crossinline fn: (A, B) -> C, a: A): (B) -> C = { b: B -> fn(a, b) }
+    inline fun <A, B, C> all(crossinline fn: (A, B) -> C): (A) -> (B) -> C = { a: A -> { b: B -> fn(a, b) } }
 
 }
