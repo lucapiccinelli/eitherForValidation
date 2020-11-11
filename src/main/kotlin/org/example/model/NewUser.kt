@@ -2,8 +2,7 @@ package org.example.model
 
 import org.example.Result
 import org.example.exec
-import org.example.map3
-import java.net.URI
+import org.example.on
 
 data class NewUser(
     val username: String,

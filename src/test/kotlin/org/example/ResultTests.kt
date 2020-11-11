@@ -111,6 +111,8 @@ class ResultTests {
         val x = Result.Ok(1)
         val y = Result.Ok("2")
 
-        Curry(fn)
+        val z = y.ap(x.map { Curry(fn).with(it) }).ifError("")
+
+        assertThat(z).isEqualTo("3")
     }
 }
