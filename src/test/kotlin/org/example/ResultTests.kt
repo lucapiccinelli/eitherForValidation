@@ -94,4 +94,14 @@ class ResultTests {
 
         assertThat(resultValue).isEqualTo(0)
     }
+
+    @Test
+    internal fun `GIVEN a function inside a Result and an ok Result WHEN i apply the fn THEN i get the ok value`() {
+        val resultFn: Result<(Int) -> String> = Result.pure { x: Int -> (x + 1).toString() }
+
+        val x = Result.pure(1)
+        val y = x.ap(resultFn).ifError("")
+
+        assertThat(y).isEqualTo("2")
+    }
 }
