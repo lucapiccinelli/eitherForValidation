@@ -2,7 +2,6 @@ package org.example.model
 
 import org.example.Result
 import org.example.exec
-import org.example.on
 
 data class NewUser(
     val username: String,
@@ -26,20 +25,18 @@ data class NewUser(
             Email.from(email) and
             PhoneNumber.from(phoneNumber) exec {
 
-            params { x: Password ->
-                   { y: Email? ->
-                   { z: PhoneNumber? ->
+            on { x: Password ->
+               { y: Email? ->
+               { z: PhoneNumber? ->
 
-                        NewUser(
-                            username = username,
-                            name = NameOfAPerson(firstname, lastname),
-                            password = x,
-                            jobDescription = jobDescription,
-                            contacts = UserContacts(y, z)
-                        )
-                    }
-                }
-            }
+                    NewUser(
+                        username = username,
+                        name = NameOfAPerson(firstname, lastname),
+                        password = x,
+                        jobDescription = jobDescription,
+                        contacts = UserContacts(y, z)
+                    )
+               }}}
         }
     }
 }
