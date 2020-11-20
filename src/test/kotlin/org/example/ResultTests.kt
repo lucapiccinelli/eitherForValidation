@@ -145,7 +145,7 @@ class ResultTests {
             }}}}}}
 
         x and y and z and k exec {
-            on { on2({ xx: Int, yy: String, zz: Double, kk: Long ->
+            on { ap({ xx: Int, yy: String, zz: Double, kk: Long ->
 
                 (xx + yy.toInt() + zz + kk).toString()
 
@@ -153,7 +153,7 @@ class ResultTests {
         }
 
         x and y and z and k and h exec {
-            on { on { on2({ xx: Int, yy: String, zz: Double, kk: Long, hh: Int ->
+            on { on { ap({ xx: Int, yy: String, zz: Double, kk: Long, hh: Int ->
 
                 (xx + yy.toInt() + zz + kk + hh).toString()
 
@@ -162,9 +162,14 @@ class ResultTests {
 
 
         x and y and z exec {
-            on2({ xx: Int, yy: String, zz: Double ->
+            ap({ xx: Int, yy: String, zz: Double ->
                 (xx + yy.toInt() + zz).toString()
             }.curry())
+        }
+
+        (x and y and z).map {
+            val (xy, z) = it
+            val (x, y) = xy
         }
 
         x and y on { xx, yy -> xx + yy.toInt() }

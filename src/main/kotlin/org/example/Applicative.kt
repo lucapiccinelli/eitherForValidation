@@ -5,7 +5,9 @@ class Applicative<A, B> (val a: A, val b: B) {
 
     inline fun <C> on(fn: A.(A) -> (B) -> C): C = a.fn(a)(b)
 
-    inline infix fun <C> on2(fn: (A) -> (B) -> C): C = fn(a)(b)
+    inline fun <C> ap(fn: (A) -> (B) -> C): C = fn(a)(b)
+
+    operator fun <C> invoke(fn: (A) -> (B) -> C): C = fn(a)(b)
 
     operator fun component1() = a
     operator fun component2() = b
