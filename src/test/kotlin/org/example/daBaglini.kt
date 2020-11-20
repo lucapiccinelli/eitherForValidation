@@ -97,26 +97,12 @@ class ApplicativeBuilderTests {
     // aka apply function
     infix fun <A, B> ((A) -> B).`@`(a: A): B = this(a)
     // aka map in Functor
-    infix fun <A, B> ((A) -> B).`$`(a: Result<A>): Result<B> = when (a) {
-        is Result.Ok -> Result.pure(this(a.value))
-        is Result.Error -> Result.Error(a.description)
-    }
+    infix fun <A, B> ((A) -> B).`$`(a: Result<A>): Result<B> = a.map(this)
     // aka ap in Applicative functor
     infix fun <A, B> Result<(A) -> B>.`*`(a: Result<A>): Result<B> = when (this) {
-        is Result.Ok -> {
-            when (a) {
-                is Result.Ok -> Result.pure(this.value(a.value))
-                is Result.Error -> Result.Error(a.description)
-            }
-        }
-        is Result.Error -> Result.Error(this.description)
+        is Result.Ok -> a.map(value)
+        is Result.Error -> Result.Error(description)
     }
     // aka Monoidal Applicative
-    infix fun <A, B> Result<A>.`**`(b: Result<B>): Result<Pair<A, B>> = when (this) {
-        is Result.Ok -> when (b) {
-            is Result.Ok -> Result.pure(this.value to b.value)
-            is Result.Error -> Result.Error(b.description)
-        }
-        is Result.Error -> Result.Error(this.description)
-    }
+    infix fun <A, B> Result<A>.`**`(b: Result<B>): Result<Pair<A, B>> = flatMap { a -> b.map { bb -> a to bb } }
 }

@@ -138,6 +138,27 @@ class ResultTests {
         val k = Result.Ok(4L)
         val h = Result.Ok(2)
 
+        x and y on { xx, yy -> xx + yy.toInt() }
+
+        (x and y and z).map {
+            val (xy, z) = it
+            val (x, y) = xy
+        }
+
+        x and y and z exec {
+            ap({ xx: Int, yy: String, zz: Double ->
+                (xx + yy.toInt() + zz).toString()
+            }.curry())
+        }
+
+        x and y and z and k and h exec {
+            on { on { ap({ xx: Int, yy: String, zz: Double, kk: Long, hh: Int ->
+
+                (xx + yy.toInt() + zz + kk + hh).toString()
+
+            }.curry()) }}
+        }
+
 
         x and y and z and k exec {
             on { on { xx -> { yy -> { zz -> { kk ->
@@ -152,27 +173,8 @@ class ResultTests {
             }.curry()) }
         }
 
-        x and y and z and k and h exec {
-            on { on { ap({ xx: Int, yy: String, zz: Double, kk: Long, hh: Int ->
-
-                (xx + yy.toInt() + zz + kk + hh).toString()
-
-            }.curry()) }}
-        }
 
 
-        x and y and z exec {
-            ap({ xx: Int, yy: String, zz: Double ->
-                (xx + yy.toInt() + zz).toString()
-            }.curry())
-        }
-
-        (x and y and z).map {
-            val (xy, z) = it
-            val (x, y) = xy
-        }
-
-        x and y on { xx, yy -> xx + yy.toInt() }
     }
 
 //    @Test
