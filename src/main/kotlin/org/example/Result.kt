@@ -1,8 +1,8 @@
 package org.example
 
-sealed class Result<T>{
-    data class Ok<T>(val value: T): Result<T>()
-    data class Error<T>(val description: String): Result<T>()
+sealed class Result<out T>{
+    data class Ok<out T>(val value: T): Result<T>()
+    data class Error<out T>(val description: String): Result<T>()
 
     companion object{
         fun <T> pure(x: T): Result<T> = Ok(x)
@@ -19,24 +19,24 @@ sealed class Result<T>{
         is Error -> Error(this.description)
     }
 
-    inline fun ifError(errorHandler: (Error<T>) -> T): T = when(this){
-        is Ok -> value
-        is Error -> errorHandler(this)
-    }
-
     fun <R> ap(fn: Result<(T) -> R>): Result<R> = when(this){
         is Ok -> fn.map { it(this.value) }
         is Error -> Error(this.description)
     }
 
-    fun ifError(errorValue: T): T = ifError { errorValue }
-
-    fun get(): T = ifError{ error ->  throw ResultException(error) }
-
     infix fun <R> and(otherResult: Result<R>): Result<Applicative<T, R>> = flatMap { t -> otherResult.map { r -> Applicative(t, r) } }
 }
 
-inline infix fun <A, B, C> Result<out Applicative<out A, out B>>.exec(fn: A.(A) -> (B) -> C): Result<C> =
+inline fun <T> Result<T>.ifError(errorHandler: (Result.Error<T>) -> T): T = when(this){
+    is Result.Ok -> value
+    is Result.Error -> errorHandler(this)
+}
+
+fun <T> Result<T>.ifError(errorValue: T): T = ifError { errorValue }
+
+fun <T> Result<T>.get(): T = ifError{ error ->  throw ResultException(error) }
+
+inline infix fun <A, B, C> Result<Applicative<A, B>>.exec(fn: A.(A) -> (B) -> C): Result<C> =
     map { ap -> ap.on(fn) }
 
 inline infix fun <A, B, C> Result<Applicative<A, B>>.on2(fn: (A) -> (B) -> C): Result<C> =

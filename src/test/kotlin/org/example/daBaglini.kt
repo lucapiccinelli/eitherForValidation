@@ -89,7 +89,7 @@ class ApplicativeBuilderTests {
                 .`*`(Result.pure(NameOfAPerson(firstname, lastname)))
                 .`*`(Password.from(password))
                 .`*`(Result.pure(jobDescription))
-                .`*`(contacts.map { x -> x })
+                .`*`(contacts)
     }
     fun <A, B, Z> ((A, B) -> Z).curry(): (A) -> (B) -> Z = { a -> { b -> this(a, b) } }
     fun <A, B, C, Z> ((A, B, C) -> Z).curry(): (A) -> (B) -> (C) -> Z = { a -> { b -> { c -> this(a, b, c) } } }

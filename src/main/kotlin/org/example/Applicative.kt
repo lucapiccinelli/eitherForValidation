@@ -1,6 +1,6 @@
 package org.example
 
-class Applicative<A, B> (val a: A, val b: B) {
+class Applicative<out A, out B> (val a: A, val b: B) {
     inline fun <C> map(fn: (A, B) -> C): C = fn(a, b)
 
     inline fun <C> on(fn: A.(A) -> (B) -> C): C = a.fn(a)(b)
