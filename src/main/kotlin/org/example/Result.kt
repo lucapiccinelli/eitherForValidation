@@ -1,6 +1,6 @@
 package org.example
 
-sealed class Result<out T>{
+sealed class Result<out T> {
     data class Ok<out T>(val value: T): Result<T>()
     data class Error<out T>(val description: String): Result<T>()
 

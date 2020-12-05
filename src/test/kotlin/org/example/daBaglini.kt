@@ -64,7 +64,7 @@ class ApplicativeBuilderTests {
                 lastname = "Piccinelli",
                 password = "banane",
                 jobDescription = "Developer",
-                email = "luca.picci@gmail.com",
+                email = "luca.piccigmail.com",
                 phoneNumber = "+39 34755555555"
         )
         when (userResult) {
@@ -99,10 +99,7 @@ class ApplicativeBuilderTests {
     // aka map in Functor
     infix fun <A, B> ((A) -> B).`$`(a: Result<A>): Result<B> = a.map(this)
     // aka ap in Applicative functor
-    infix fun <A, B> Result<(A) -> B>.`*`(a: Result<A>): Result<B> = when (this) {
-        is Result.Ok -> a.map(value)
-        is Result.Error -> Result.Error(description)
-    }
+    infix fun <A, B> Result<(A) -> B>.`*`(a: Result<A>): Result<B> = flatMap { fn -> a.map(fn) }
     // aka Monoidal Applicative
     infix fun <A, B> Result<A>.`**`(b: Result<B>): Result<Pair<A, B>> = flatMap { a -> b.map { bb -> a to bb } }
 }
