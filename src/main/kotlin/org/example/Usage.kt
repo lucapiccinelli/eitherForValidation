@@ -2,9 +2,8 @@ package org.example
 
 import org.example.model.Email
 import org.example.model.PhoneNumber
-import org.example.Nullable
-import org.example.Nullable.Companion.toNull
-import org.example.Nullable.Companion.toNullable
+import org.example.Maybe.Companion.toNullable
+import org.example.Maybe.Companion.toMaybe
 
 data class Usage(val name: String, val email: Email, val phoneNumber: PhoneNumber, val bla: String){
 
@@ -25,10 +24,10 @@ data class Bla(val x: Int, val y: String, val z: Float){
     companion object {
         fun new(x: Int?, y: String?, z: Float): Bla? =
             ::Bla.curry()
-                .map(x.toNullable())
-                .ap(y.toNullable())
+                .map(x.toMaybe())
+                .ap(y.toMaybe())
                 .pure(z)
-                .toNull()
+                .toNullable()
     }
 
 }
