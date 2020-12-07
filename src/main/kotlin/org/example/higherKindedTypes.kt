@@ -13,6 +13,6 @@ interface ApplicativeFunctorKind<F, out T>: FunctorKind<F, T>{
 }
 interface MonadKind<F, out T>: FunctorKind<F, T>{
 
-    fun <R> flatMap(fn: (T) -> MonadKind<F, R>): MonadKind<F, R>
+    fun <R> flatMapK(fn: (T) -> MonadKind<F, R>): MonadKind<F, R>
 
 }
