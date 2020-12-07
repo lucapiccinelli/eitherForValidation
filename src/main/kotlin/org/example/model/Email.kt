@@ -7,11 +7,11 @@ const val EMAIL_REGEX = "(?:[a-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#\$%&'*+/
 
 data class Email private constructor (override val value: String): UserContact {
     companion object{
-        fun from(value: String?): Result2<Email?> = value?.let {
+        fun from(value: String?): Result<Email?> = value?.let {
             if (Regex(EMAIL_REGEX).matches(value))
-                Result2.Ok(Email(value))
-                else Result2.Error("$value doesn't match an email format")
-        } ?: Result2.Ok(null)
+                Result.Ok(Email(value))
+                else Result.Error("$value doesn't match an email format")
+        } ?: Result.Ok(null)
 
         fun from2(value: String): Result2<Email> =
             if (Regex(EMAIL_REGEX).matches(value))

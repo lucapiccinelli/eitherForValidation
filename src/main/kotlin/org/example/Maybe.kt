@@ -3,7 +3,7 @@ package org.example
 
 typealias MayBeOf = Any?
 
-class Maybe<out T>(private val value: T?):
+class Maybe<out T> private constructor(private val value: T?):
     MayBeOf(),
     MonadKind<MayBeOf, T>,
     ApplicativeFunctorKind<MayBeOf, T> {

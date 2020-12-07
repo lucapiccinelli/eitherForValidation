@@ -20,7 +20,6 @@ data class PhoneNumber private constructor(override val value: String): UserCont
             if(Regex(PHONENUMBER_REGEX).matches(phoneNumberValue))
                 Result2.Ok(PhoneNumber(phoneNumberValue))
                 else Result2.Error("$phoneNumberValue should match a valid phone number, but it doesn't")
-            }
     }
 
 }
